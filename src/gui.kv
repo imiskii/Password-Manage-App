@@ -1,0 +1,385 @@
+#:kivy 2.1.0
+
+<WindowManager>:
+    MainWindow:
+        name: "main"
+    DetailWindow:
+        name: "detail"
+
+
+<MainWindow>:
+
+    BoxLayout:
+        orientation: "vertical"
+        #size: root.width, root.height
+
+        GridLayout:
+            cols: 2
+            rows: 1
+            size_hint: 1, 0.1
+            padding_left: 20
+            padding: 5
+
+            Label:
+                text: "Choose record"
+                color: 1,0,0,1
+                size_hint: 0.8, 1
+                bold: True
+                font_size: '16sp'
+                text_size: self.size
+                halign: 'left'
+                valign: 'middle'
+                padding_x: 20
+
+            Button:
+                text: "Add record"
+                size_hint: 0.2, 1
+                on_release: root.show_create_dialog()
+
+        ####################
+
+        BoxLayout:
+            orientation: "vertical"
+            size_hint: 1, 0.9
+
+            Accordion:
+                orientation: "vertical"
+
+                AccordionItem:
+                    title: "Accounts"
+                    ScrollView:
+                        do_scroll_x: False
+                        do_scroll_y: True
+
+                        MDList:
+                            id: accounts_list
+
+                
+                AccordionItem:
+                    title: "Games"
+                    ScrollView:
+                        do_scroll_x: False
+                        do_scroll_y: True
+
+                        MDList:
+                            id: games_list
+                
+                AccordionItem:
+                    title: "E-mails"
+                    ScrollView:
+                        do_scroll_x: False
+                        do_scroll_y: True
+
+                        MDList:
+                            id: emails_list
+
+                AccordionItem:
+                    title: "Licences"
+                    ScrollView:
+                        do_scroll_x: False
+                        do_scroll_y: True
+
+                        MDList:
+                            id: licences_list
+
+
+<CustomTwoLineList>:
+    id: the_list_item
+    markup: True
+    
+    IconRightWidget:
+        icon: 'trash-can-outline'
+        theme_text_color: "Custom"
+        text_color: 1, 0, 0, 1
+        on_release:
+            app.root.children[0].delete(the_list_item)
+
+
+<CreateDialogContent>:
+    orientation: "vertical"
+    spacing: "5dp"
+    size_hint: 1, None
+    height: "340dp"
+
+    BoxLayout:
+        orientation: "horizontal"
+        size_hint: 1, 0.1
+        spacing: "10dp"
+
+        Spinner:
+            id: category_spinner
+            size_hint: None, None
+            size: "100dp", "44dp"
+            text: "Categories"
+            values: ["Accounts", "Games", "Emails", "Licences"]
+
+        Button:
+            text: "Generate Password"
+            size_hint: None, None
+            size: "200dp", "44dp"
+            on_release: root.generate_password()
+
+    GridLayout:
+        size_hint: 1, 0.8
+        rows: 5
+        cols: 1
+
+        MDTextField:
+            id: new_name
+            hint_text: "Name"
+            required: True
+            pos_hint: {"center_y": .4}
+            max_text_length: 50
+
+        MDTextField:
+            id: new_email
+            hint_text: "E-mail"
+            required: True
+            pos_hint: {"center_y": .4}
+            max_text_length: 50
+
+        MDTextField:
+            id: new_password
+            hint_text: "Password"
+            required: True
+            pos_hint: {"center_y": .4}
+            max_text_length: 50
+
+        MDTextField:
+            id: new_description
+            hint_text: "Description"
+            required: True
+            pos_hint: {"center_y": .4}
+            max_text_length: 50
+
+
+    BoxLayout:
+        orientation: 'horizontal'
+        size_hint: 1, 0.1
+
+        MDRaisedButton:
+            text: "SAVE"
+            on_release: (app.root.children[0].create(category_spinner.text, new_name.text, new_email.text, new_password.text, new_description.text), app.root.children[0].close_dialog())
+
+        MDFlatButton:
+            text: 'CANCEL'
+            on_release: app.root.children[0].close_dialog()
+
+
+<DetailWindow>:
+
+    BoxLayout:
+        orientation: "vertical"
+
+        Label:
+            id: page_name
+            color: 1,0,0,1
+            size_hint: 1, 0.1
+            bold: True
+            font_size: '16sp'
+            padding_x: 20
+
+        ####################
+
+        GridLayout:
+            cols: 3
+            rows: 1
+            size_hint: 1, 0.2
+            padding_left: 20
+            padding: 5
+
+            Label:
+                text: "Name:"
+                bold: True
+                font_size: '16sp'
+                halign: 'left'
+                valign: 'middle'
+                text_size: self.size
+                color: 1,0,0,1
+                size_hint: 0.2, 1
+                padding_x: 10
+
+            Label:
+                id: name_label
+                text: "None"
+                text_size: self.size
+                halign: 'left'
+                valign: 'middle'
+                color: 0,0,0,1
+                size_hint: 0.6, 1
+
+            Button:
+                text: "Edit"
+                size_hint: 0.2, 1
+                on_release: root.show_edit_dialog("name_label")
+
+        GridLayout:
+            cols: 3
+            rows: 1
+            size_hint: 1, 0.2
+            padding_left: 20
+            padding: 5
+
+            Label:
+                text: "E-mail:"
+                bold: True
+                font_size: '16sp'
+                halign: 'left'
+                valign: 'middle'
+                text_size: self.size
+                color: 1,0,0,1
+                size_hint: 0.2, 1
+                padding_x: 10
+
+            Label:
+                id: email_label
+                text: "None"
+                text_size: self.size
+                halign: 'left'
+                valign: 'middle'
+                color: 0,0,0,1
+                size_hint: 0.6, 1
+
+            Button:
+                text: "Edit"
+                size_hint: 0.2, 1
+                on_release: root.show_edit_dialog("email_label")
+
+        GridLayout:
+            cols: 3
+            rows: 1
+            size_hint: 1, 0.2
+            padding_left: 20
+            padding: 5
+
+            Label:
+                text: "Password:"
+                bold: True
+                font_size: '16sp'
+                halign: 'left'
+                valign: 'middle'
+                text_size: self.size
+                color: 1,0,0,1
+                size_hint: 0.2, 1
+                padding_x: 10
+
+            Label:
+                id: password_label
+                text: "None"
+                text_size: self.size
+                halign: 'left'
+                valign: 'middle'
+                color: 0,0,0,1
+                size_hint: 0.6, 0.2
+
+            Button:
+                text: "Edit"
+                size_hint: 0.2, 1
+                on_release: root.show_edit_PW_dialog("password_label")
+
+
+        GridLayout:
+            cols: 3
+            rows: 1
+            size_hint: 1, 0.2
+            padding_left: 20
+            padding: 5
+
+            Label:
+                text: "Description:"
+                bold: True
+                font_size: '16sp'
+                halign: 'left'
+                valign: 'middle'
+                text_size: self.size
+                color: 1,0,0,1
+                size_hint: 0.2, 1
+                padding_x: 10
+
+            Label:
+                id: description_label
+                text: "None"
+                text_size: self.size
+                halign: 'left'
+                valign: 'middle'
+                color: 0,0,0,1
+                size_hint: 0.6, 1
+            
+            Button:
+                text: "Edit"
+                size_hint: 0.2, 1
+                on_release: root.show_edit_dialog("description_label")
+
+        GridLayout:
+            cols: 1
+            rows: 1
+            size_hint: 1, 0.1
+            padding_left: 20
+            padding: 5
+
+            Button:
+                text: "Go Back"
+                size_hint: 1, 1
+                on_release: app.root.current = "main"
+
+
+
+<EditDialogContent>:
+
+    orientation: "vertical"
+    spacing: "10dp"
+    size_hint: 1, None
+    height: "130dp"
+
+    GridLayout:
+        rows: 1
+
+        MDTextField:
+            id: new_text
+            hint_text: "Edit"
+            required: True
+            pos_hint: {"center_y": .4}
+            max_text_length: 50
+
+    BoxLayout:
+        orientation: 'horizontal'
+
+        MDRaisedButton:
+            text: "SAVE"
+            on_release: (app.root.children[0].change(new_text.text), app.root.children[0].close_dialog())
+        MDFlatButton:
+            text: 'CANCEL'
+            on_release: app.root.children[0].close_dialog()
+
+
+<PWEditDialogContent>:
+    orientation: "vertical"
+    spacing: "10dp"
+    size_hint: 1, None
+    height: "150dp"
+
+    Button:
+        text: "Generate Password"
+        size_hint: None, None
+        size: "200dp", "44dp"
+        on_release: root.generate_password()
+
+    GridLayout:
+        rows: 1
+
+        MDTextField:
+            id: new_text
+            hint_text: "Edit"
+            required: True
+            pos_hint: {"center_y": .4}
+            max_text_length: 50
+
+    BoxLayout:
+        orientation: 'horizontal'
+
+        MDRaisedButton:
+            text: "SAVE"
+            on_release: (app.root.children[0].change(new_text.text), app.root.children[0].close_dialog())
+        MDFlatButton:
+            text: 'CANCEL'
+            on_release: app.root.children[0].close_dialog()
